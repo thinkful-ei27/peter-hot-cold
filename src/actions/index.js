@@ -7,12 +7,13 @@ const addGuess = guess => ({
 });
 
 
-const resetGame = answer => ({
-  type: RESET_GAME,
-  answer
+const resetGame = () => ({
+  type: RESET_GAME
 });
 
-export default {
+export {
   ADD_GUESS,
-  RESET_GAME
+  RESET_GAME,
+  addGuess,
+  resetGame
 }
