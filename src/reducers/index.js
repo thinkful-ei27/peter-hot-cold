@@ -1,10 +1,12 @@
 import { ADD_GUESS, RESET_GAME } from '../actions/index';
+import {SECRET_ANSWER} from '../config'
+console.log(SECRET_ANSWER)
 
 const initialState = {
   guesses: [],
   feedback: 'Make your guess!',
   auralStatus: '',
-  correctAnswer: Math.floor(Math.random() * 100) + 1
+  // correctAnswer: SECRET_ANSWER
 }
 
 function getAuralStatus(guesses, feedback) {
@@ -50,10 +52,10 @@ const hotColdReducer = (state = initialState, action) => {
       auralStatus: getAuralStatus(state.guesses, state.feedback)
     }
   } else if (action.type === RESET_GAME) {
-    return {
+    return ({
       ...initialState,
-      correctAnswer: Math.floor(Math.random() * 100) + 1
-    }
+      correctAnswer: SECRET_ANSWER()
+    })
   }
   return state;
 }
