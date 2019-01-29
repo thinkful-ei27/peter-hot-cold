@@ -18,7 +18,7 @@ console.log('INITIAL STATE ==========', store.getState());
 store.dispatch(addGuess(37));
 store.dispatch(addGuess(4));
 store.dispatch(addGuess(95));
-store.dispatch(addGuess(56));
+store.dispatch(addGuess('banana'));
 console.log('ADD_GUESS ==========', store.getState());
 
 store.dispatch(resetGame());
