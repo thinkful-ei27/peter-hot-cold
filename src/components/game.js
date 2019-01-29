@@ -37,7 +37,7 @@ class Game extends React.Component {
   render() {
     const { feedback, guesses, auralStatus } = this.props;
     const guessCount = guesses.length;
-    // document.title = feedback ? `${feedback} | Hot or Cold` : 'Hot or Cold';
+    document.title = feedback ? `${feedback} | Hot or Cold` : 'Hot or Cold';
     return (
       <div>
         <Header
@@ -62,7 +62,7 @@ class Game extends React.Component {
 
 const mapStateToProps = (state) => ({
   guesses: state.guesses,
-  feedback: state.feeback,
+  feedback: state.feedback,
   auralStatus: state.auralStatus,
   correctAnswer: state.correctAnswer
 })
