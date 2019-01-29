@@ -4,18 +4,10 @@ import Header from './header';
 import GuessSection from './guess-section';
 import StatusSection from './status-section';
 import InfoSection from './info-section';
+import { connect } from 'react-redux';
+import { addGuess, resetGame } from '../actions/index';
 
-export default class Game extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      guesses: [],
-      feedback: 'Make your guess!',
-      auralStatus: '',
-      correctAnswer: Math.floor(Math.random() * 100) + 1
-    };
-  }
-
+class Game extends React.Component {
   restartGame() {
     this.setState({
       guesses: [],
@@ -23,40 +15,6 @@ export default class Game extends React.Component {
       auralStatus: '',
       correctAnswer: Math.floor(Math.random() * 100) + 1
     });
-  }
-
-  makeGuess(guess) {
-    guess = parseInt(guess, 10);
-    if (isNaN(guess)) {
-      this.setState({ feedback: 'Please enter a valid number' });
-      return;
-    }
-
-    const difference = Math.abs(guess - this.state.correctAnswer);
-
-    let feedback;
-    if (difference >= 50) {
-      feedback = 'You\'re Ice Cold...';
-    } else if (difference >= 30) {
-      feedback = 'You\'re Cold...';
-    } else if (difference >= 10) {
-      feedback = 'You\'re Warm.';
-    } else if (difference >= 1) {
-      feedback = 'You\'re Hot!';
-    } else {
-      feedback = 'You got it!';
-    }
-
-    this.setState({
-      feedback,
-      guesses: [...this.state.guesses, guess]
-    });
-
-    // We typically wouldn't touch the DOM directly like this in React
-    // but this is the best way to update the title of the page,
-    // which is good for giving screen-reader users
-    // instant information about the app.
-    document.title = feedback ? `${feedback} | Hot or Cold` : 'Hot or Cold';
   }
 
   generateAuralUpdate() {
@@ -77,20 +35,20 @@ export default class Game extends React.Component {
   }
 
   render() {
-    const { feedback, guesses, auralStatus } = this.state;
+    const { feedback, guesses, auralStatus } = this.props;
     const guessCount = guesses.length;
-
+    document.title = feedback ? `${feedback} | Hot or Cold` : 'Hot or Cold';
     return (
       <div>
         <Header
-          onRestartGame={() => this.restartGame()}
+          onRestartGame={() => this.props.dispatch(resetGame())}
           onGenerateAuralUpdate={() => this.generateAuralUpdate()}
         />
         <main role="main">
           <GuessSection
             feedback={feedback}
             guessCount={guessCount}
-            onMakeGuess={guess => this.makeGuess(guess)}
+            onMakeGuess={guess => this.props.dispatch(addGuess(guess))}
           />
           <StatusSection guesses={guesses} 
             auralStatus={auralStatus}
@@ -101,3 +59,12 @@ export default class Game extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  guesses: state.guesses,
+  feedback: state.feedback,
+  auralStatus: state.auralStatus,
+  correctAnswer: state.correctAnswer
+})
+
+export default connect(mapStateToProps)(Game);

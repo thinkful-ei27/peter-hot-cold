@@ -50,7 +50,10 @@ const hotColdReducer = (state = initialState, action) => {
       auralStatus: getAuralStatus(state.guesses, state.feedback)
     }
   } else if (action.type === RESET_GAME) {
-    return initialState;
+    return {
+      ...initialState,
+      correctAnswer: Math.floor(Math.random() * 100) + 1
+    }
   }
   return state;
 }
